@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { BarChart3, Building, Loader2, MapPin, Maximize, Square, Upload } from "lucide-react";
+import { getPrediction, PropertyDetails } from "@/services/predictionService";
+import { toast } from "sonner";
 
 interface PredictionFormProps {
   minimal?: boolean;
@@ -18,20 +20,46 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<number>(0);
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(null);
+  
+  // Form fields
+  const [address, setAddress] = useState<string>("");
   const [sqft, setSqft] = useState<number>(1500);
   const [bedrooms, setBedrooms] = useState<number>(3);
   const [bathrooms, setBathrooms] = useState<number>(2);
+  const [propertyType, setPropertyType] = useState<string>("single-family");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Create property details object
+      const propertyDetails: PropertyDetails = {
+        address,
+        bedrooms,
+        bathrooms,
+        sqft,
+        propertyType
+      };
+      
+      // Get prediction from service
+      const prediction = await getPrediction(propertyDetails);
+      
+      // Update state with prediction results
+      setResult(prediction.estimatedPrice);
+      setConfidence(prediction.confidenceScore);
+      if (prediction.priceRange) {
+        setPriceRange(prediction.priceRange);
+      }
+      
+      toast.success("Price prediction completed successfully!");
+    } catch (error) {
+      console.error("Prediction error:", error);
+      toast.error("Failed to get prediction. Please try again.");
+    } finally {
       setLoading(false);
-      setResult(850000);
-      setConfidence(92);
-    }, 1500);
+    }
   };
 
   if (minimal) {
@@ -43,6 +71,9 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
               placeholder="Enter your address"
               className="h-12"
               icon={<MapPin className="h-4 w-4 text-muted-foreground" />}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
             />
           </div>
           <Button type="submit" className="h-12 px-8" disabled={loading}>
@@ -75,14 +106,24 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                   <Label htmlFor="address">Property Address</Label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                    <Input id="address" placeholder="123 Main St, City, State" className="pl-10" />
+                    <Input 
+                      id="address" 
+                      placeholder="123 Main St, Pune, Maharashtra" 
+                      className="pl-10"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      required
+                    />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="beds">Bedrooms</Label>
-                    <Select defaultValue="3">
+                    <Select 
+                      defaultValue={bedrooms.toString()} 
+                      onValueChange={(value) => setBedrooms(Number(value))}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
@@ -97,7 +138,10 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="baths">Bathrooms</Label>
-                    <Select defaultValue="2">
+                    <Select 
+                      defaultValue={bathrooms.toString()}
+                      onValueChange={(value) => setBathrooms(Number(value))}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
@@ -128,7 +172,10 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
 
                 <div className="space-y-2">
                   <Label htmlFor="property-type">Property Type</Label>
-                  <Select defaultValue="single-family">
+                  <Select 
+                    defaultValue={propertyType}
+                    onValueChange={(value) => setPropertyType(value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
@@ -165,10 +212,19 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                 <div className="flex-1 flex flex-col justify-center items-center space-y-8">
                   <div className="text-center">
                     <div className="text-5xl md:text-6xl font-bold text-gradient mb-2 animate-scale-in">
-                      ${result.toLocaleString()}
+                      ₹{result.toLocaleString()}
                     </div>
                     <div className="text-muted-foreground">Estimated Value</div>
                   </div>
+                  
+                  {priceRange && (
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground mb-1">Price Range</div>
+                      <div className="text-lg font-semibold">
+                        ₹{priceRange.min.toLocaleString()} - ₹{priceRange.max.toLocaleString()}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="w-full max-w-md space-y-3">
                     <div className="flex justify-between text-sm">
@@ -205,7 +261,7 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                 <div>
                   <h3 className="text-2xl font-bold mb-2">Ready to Get Started?</h3>
                   <p className="text-muted-foreground max-w-xs mx-auto">
-                    Fill out the form and we'll provide an accurate estimate of your property's value
+                    Fill out the form and we'll provide an accurate estimate of your property's value in Pune
                   </p>
                 </div>
                 <div className="flex flex-col space-y-4 w-full max-w-xs">
@@ -213,7 +269,7 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
                       <MapPin className="h-4 w-4 text-primary" />
                     </div>
-                    <span>Enter your address</span>
+                    <span>Enter your Pune address</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">

@@ -1,106 +1,95 @@
 
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { Home, Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
+import useMobile from "@/hooks/use-mobile";
 
-interface NavbarProps {
-  className?: string;
-}
-
-export function Navbar({ className }: NavbarProps) {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isMobile = useMobile();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out py-4 px-6",
-        scrolled ? "neo-blur py-3" : "bg-transparent",
-        className
+        "fixed top-0 w-full z-50 transition-all duration-300 h-16 md:h-20 flex items-center",
+        isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"
       )}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-            <Home className="h-5 w-5 text-white" />
-          </div>
-          <span className="font-bold text-xl">PricePalette</span>
-        </a>
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
+          <span className="text-xl font-bold">PricePalette</span>
+        </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
-          <a
-            href="#features"
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center space-x-1">
+          <Link to="/" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
+            Home
+          </Link>
+          <a href="#features" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
             Features
           </a>
-          <a
-            href="#how-it-works"
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            How it Works
+          <a href="#how-it-works" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
+            How It Works
           </a>
-          <a
-            href="#testimonials"
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
+          <Link to="/model-details" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
+            Model Details
+          </Link>
+          <a href="#testimonials" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
             Testimonials
           </a>
-          <Button>Get Started</Button>
+          <Button asChild size="sm" className="ml-2 px-4">
+            <a href="#prediction-form">Get Estimate</a>
+          </Button>
         </nav>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X /> : <Menu />}
-        </Button>
+        {/* Mobile menu button */}
+        <button className="md:hidden" onClick={toggleMenu} aria-label="Toggle menu">
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
       {/* Mobile menu */}
-      <div
-        className={cn(
-          "fixed inset-x-0 top-[72px] bg-background/80 backdrop-blur-lg p-6 border-b border-border transition-all duration-300 ease-in-out transform md:hidden",
-          mobileMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
-        )}
-      >
-        <nav className="flex flex-col space-y-4">
-          <a
-            href="#features"
-            className="text-foreground/80 hover:text-foreground py-2 transition-colors"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Features
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-foreground/80 hover:text-foreground py-2 transition-colors"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            How it Works
-          </a>
-          <a
-            href="#testimonials"
-            className="text-foreground/80 hover:text-foreground py-2 transition-colors"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Testimonials
-          </a>
-          <Button className="w-full">Get Started</Button>
-        </nav>
-      </div>
+      {isMobile && isMenuOpen && (
+        <div className="absolute top-16 left-0 w-full bg-background/95 backdrop-blur-md shadow-md py-4 px-4 md:hidden">
+          <nav className="flex flex-col space-y-3">
+            <Link to="/" className="px-4 py-2 text-foreground hover:bg-muted rounded-md" onClick={toggleMenu}>
+              Home
+            </Link>
+            <a href="#features" className="px-4 py-2 text-foreground hover:bg-muted rounded-md" onClick={toggleMenu}>
+              Features
+            </a>
+            <a href="#how-it-works" className="px-4 py-2 text-foreground hover:bg-muted rounded-md" onClick={toggleMenu}>
+              How It Works
+            </a>
+            <Link to="/model-details" className="px-4 py-2 text-foreground hover:bg-muted rounded-md" onClick={toggleMenu}>
+              Model Details
+            </Link>
+            <a href="#testimonials" className="px-4 py-2 text-foreground hover:bg-muted rounded-md" onClick={toggleMenu}>
+              Testimonials
+            </a>
+            <Button asChild size="sm" className="mt-2" onClick={toggleMenu}>
+              <a href="#prediction-form">Get Estimate</a>
+            </Button>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
