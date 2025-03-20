@@ -180,10 +180,10 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="single-family">Single Family Home</SelectItem>
-                      <SelectItem value="condo">Condo</SelectItem>
-                      <SelectItem value="townhouse">Townhouse</SelectItem>
-                      <SelectItem value="multi-family">Multi-Family</SelectItem>
+                      <SelectItem value="single-family">Super built-up Area</SelectItem>
+                      <SelectItem value="condo">Built-up Area</SelectItem>
+                      <SelectItem value="townhouse">Plot Area</SelectItem>
+                      <SelectItem value="multi-family">Carpet  Area </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -243,15 +243,7 @@ export function PredictionForm({ minimal = false, className }: PredictionFormPro
                   </div>
                 </div>
 
-                <div className="flex justify-between gap-4">
-                  <Button variant="outline" className="flex-1">
-                    <BarChart3 className="mr-2 h-4 w-4" />
-                    <span>Compare</span>
-                  </Button>
-                  <Button className="flex-1">
-                    Detailed Report
-                  </Button>
-                </div>
+
               </>
             ) : (
               <div className="flex-1 flex flex-col justify-center items-center text-center space-y-8">

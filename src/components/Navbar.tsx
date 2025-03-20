@@ -41,18 +41,14 @@ export function Navbar() {
           <Link to="/" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
             Home
           </Link>
-          <a href="#features" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
-            Features
-          </a>
+          
           <a href="#how-it-works" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
             How It Works
           </a>
           <Link to="/model-details" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
             Model Details
           </Link>
-          <a href="#testimonials" className="px-4 py-2 text-foreground/70 hover:text-foreground transition-colors">
-            Testimonials
-          </a>
+          
           <Button asChild size="sm" className="ml-2 px-4">
             <a href="#prediction-form">Get Estimate</a>
           </Button>

@@ -3,8 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { PredictionForm } from "@/components/PredictionForm";
 import { FeatureCard } from "@/components/FeatureCard";
-import { TestimonialCard } from "@/components/TestimonialCard";
-import { Footer } from "@/components/Footer";
+
 import { FadeIn, StaggeredFadeIn } from "@/components/animations/FadeIn";
 import {
   Award,
@@ -33,11 +32,7 @@ const Index = () => {
       description: "Stay updated with the latest real estate trends and market valuations in your neighborhood.",
       icon: TrendingUp,
     },
-    {
-      title: "Comprehensive Analysis",
-      description: "Detailed reports on property valuation factors, including location, size, amenities, and market trends.",
-      icon: LineChart,
-    },
+    
     {
       title: "Instant Results",
       description: "Get immediate property value estimates without waiting for traditional appraisals.",
@@ -48,49 +43,11 @@ const Index = () => {
       description: "Neighborhood-specific insights that affect your property's value, from schools to amenities.",
       icon: MapPin,
     },
-    {
-      title: "Competitive Edge",
-      description: "Make informed decisions with comparative market analysis of similar properties in your area.",
-      icon: Award,
-    },
+    
   ];
 
   // Testimonials data
-  const testimonials = [
-    {
-      content: "The price prediction was spot on! I was able to sell my house for almost exactly what PricePalette estimated. This tool is a game-changer for homeowners.",
-      author: {
-        name: "Sarah Johnson",
-        role: "Homeowner",
-        image: "",
-      },
-    },
-    {
-      content: "As a real estate investor, I rely on accurate valuations. This tool has been instrumental in helping me identify undervalued properties in competitive markets.",
-      author: {
-        name: "Michael Chen",
-        role: "Real Estate Investor",
-        image: "",
-      },
-    },
-    {
-      content: "The detailed breakdown of how different features affect my home's value was eye-opening. I used these insights to prioritize renovations that actually increased my property value.",
-      author: {
-        name: "Emma Rodriguez",
-        role: "Home Renovator",
-        image: "",
-      },
-    },
-    {
-      content: "In my 15 years as a realtor, I've never seen such an accurate automated valuation tool. I now recommend PricePalette to all my clients before listing their properties.",
-      author: {
-        name: "David Thompson",
-        role: "Real Estate Agent",
-        image: "",
-      },
-    },
-  ];
-
+  
   // How it works steps
   const steps = [
     {
@@ -114,7 +71,7 @@ const Index = () => {
     {
       number: "04",
       title: "Get Your Valuation",
-      description: "Receive a comprehensive report with your property's estimated value, price factors, and confidence score.",
+      description: "",
       icon: DollarSign,
     },
   ];
@@ -180,7 +137,7 @@ const Index = () => {
           </div>
         </section>
         
-        {/* CTA Section with Form */}
+       
         <section className="py-20 bg-gradient-soft">
           <div className="container mx-auto px-4">
             <FadeIn className="text-center max-w-3xl mx-auto mb-12">
@@ -196,46 +153,13 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Testimonials */}
-        <section id="testimonials" className="py-20">
-          <div className="container mx-auto px-4">
-            <FadeIn className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Users Say</h2>
-              <p className="text-xl text-muted-foreground">
-                Real experiences from homeowners, buyers, and real estate professionals
-              </p>
-            </FadeIn>
-            
-            <div className="grid gap-6 md:grid-cols-2">
-              {testimonials.map((testimonial, index) => (
-                <FadeIn key={index} delay={0.15 * index}>
-                  <TestimonialCard
-                    content={testimonial.content}
-                    author={testimonial.author}
-                  />
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
+       
         
-        {/* Final CTA */}
-        <section className="py-20 bg-primary text-primary-foreground">
-          <div className="container mx-auto px-4 text-center">
-            <FadeIn className="max-w-3xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Transform How You Value Real Estate</h2>
-              <p className="text-xl opacity-80 mb-8">
-                Join thousands of homeowners who've discovered their property's true market value
-              </p>
-              <Button size="lg" variant="secondary" className="h-12 px-8">
-                Get Started Today
-              </Button>
-            </FadeIn>
-          </div>
-        </section>
+       
+        
       </main>
       
-      <Footer />
+      
     </div>
   );
 };

@@ -1,6 +1,6 @@
 
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+
 import { FadeIn } from "@/components/animations/FadeIn";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -205,7 +205,7 @@ const ModelDetails = () => {
         </section>
       </main>
       
-      <Footer />
+     
     </div>
   );
 };
